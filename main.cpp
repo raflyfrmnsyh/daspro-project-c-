@@ -1,14 +1,23 @@
 #include <iostream>
+#include <string>
 using namespace std;
 
 struct FoodMenu{
     string kategori;
+    string id;
     string nama;
     int harga;
     FoodMenu *next;
     FoodMenu *prev;
 };
 
+struct Cart{
+    string *nama;
+    int *harga;
+    int qty;
+    Cart *next;
+};
+Cart *firstCart;
 FoodMenu *firstMenu;
 
 bool isMenuEmpty(){
@@ -19,10 +28,11 @@ bool isMenuEmpty(){
     }
 }
 
-void createMenu(string kategori, string nama, int harga){
+void createMenu(string kategori, string id, string nama, int harga){
     FoodMenu *newMenu, *current, *nextMenu;
     newMenu = new FoodMenu;
     newMenu->nama = nama;
+    newMenu->id = id;
     newMenu->kategori = kategori;
     newMenu->harga = harga;
     newMenu->next = NULL;
@@ -59,9 +69,9 @@ void printMenu(){
 
         while(current != NULL){
             if(current->prev == NULL || current->kategori != current->prev->kategori){
-                cout << "\n[" << current->kategori << "]\n";
+                cout << "\n[id]\t[" << current->kategori << "]\n";
             }
-            cout << current->nama << "\t\tRp " << current->harga << "\n";
+            cout << current->id << "\t" << current->nama << "\t\tRp " << current->harga << "\n";
             current = current->next;
         }
 
@@ -73,6 +83,87 @@ void printMenu(){
         //     cout << current->nama << "\t\tRp " << current->harga << "\n";
         //     current = current->prev;
         // }
+    }
+}
+
+FoodMenu * cariMenu(string namaMenu){
+    FoodMenu *current;
+    if(!isMenuEmpty()){
+        current = firstMenu;
+        while(current != NULL){
+            if(current->nama == namaMenu){
+                return current;
+            }
+            current = current->next;
+        }
+        return NULL;
+    } else {
+        return NULL;
+    }
+}
+
+void addMenu(){
+    string idMenu;
+    FoodMenu *current;
+
+    cout << "\nId Menu: ";
+    getline(cin, idMenu);
+    cout << "Id menu yg Anda Pesan: " << idMenu << endl;
+    // cout << cariMenu(idMenu)->harga;
+    if(!isMenuEmpty()){
+        current = firstMenu;
+        while(current != NULL){
+            if(current->id == idMenu){
+                break;
+            }
+            current = current->next;
+        }
+
+        if(current != NULL){
+            cout << current->harga;
+        } else{
+            cout << "Menu ga adaaa";
+            return;
+        }
+
+        Cart *currentCart, *prevCart, *newCart;
+        newCart = new Cart;
+        newCart->nama = &current->nama;
+        newCart->harga = &current->harga;
+        newCart->next = NULL;
+
+        if(firstCart != NULL){
+            
+            currentCart = firstCart;
+            while(currentCart != NULL){
+                if(currentCart->next == NULL){
+                    prevCart = currentCart;
+                }
+                if(*currentCart->nama == current->nama){
+                    cout << "ada ayam bakar\n";
+                    currentCart->qty += 1;
+                    delete newCart;
+                    return;
+                }
+                currentCart = currentCart->next;
+            }
+            prevCart->next = newCart;
+            newCart->qty = 1;
+
+        } else {
+            newCart->qty = 1;
+            firstCart = newCart;
+        }
+    }
+}
+
+void printCart(){
+    if(firstCart != NULL){
+        Cart *current = firstCart;
+        while(current != NULL){
+            cout << "\n" << *current->nama << "\t\t" << *current->harga << " x " << current->qty << " = " << *current->harga * current->qty << "\n";
+            current = current->next;
+        }
     }
 }
 
@@ -90,22 +181,27 @@ int main(){
     // };
     // cout << paketan[0].nama << endl;
 
-    createMenu("Lauk", "Ayam Bakar", 15000);
-    createMenu("Lauk", "Ayam Goreng", 13000);
-    createMenu("Lauk", "Ayam Geprek", 17000);
+    createMenu("Lauk", "a1", "Ayam Bakar", 15000);
+    createMenu("Lauk", "a2", "Ayam Goreng", 13000);
+    createMenu("Lauk", "a3", "Ayam Geprek", 17000);
 
-    createMenu("Nasi", "Nasi Putih", 5000);
-    createMenu("Nasi", "Nasi Kuning", 7000);
-    createMenu("Nasi", "Nasi Kebuli", 10000);
+    createMenu("Nasi", "n1", "Nasi Putih", 5000);
+    createMenu("Nasi", "n2", "Nasi Kuning", 7000);
+    createMenu("Nasi", "n3", "Nasi Kebuli", 10000);
 
-    createMenu("Minuman", "Es Teh Manis", 7000);
-    createMenu("Minuman", "Air Mineral", 4000);
-    createMenu("Minuman", "Es Jeruk", 8000);
+    createMenu("Minuman", "m1", "Es Teh Manis", 7000);
+    createMenu("Minuman", "m2", "Air Mineral", 4000);
+    createMenu("Minuman", "m3", "Es Jeruk", 8000);
 
-    createMenu("Lauk", "Ikan Bakar", 23000);
-    createMenu("Nasi", "Nasi Goreng", 13000);
+    createMenu("Lauk", "a4", "Ikan Bakar", 23000);
+    createMenu("Nasi", "n4", "Nasi Goreng", 13000);
     
     printMenu();
+
+    addMenu();
+    addMenu();
+
+    printCart();
 
     
 }
