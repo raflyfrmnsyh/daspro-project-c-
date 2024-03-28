@@ -5,7 +5,8 @@ struct FoodMenu{
     string kategori;
     string nama;
     int harga;
-    FoodMenu *next, *prev;
+    FoodMenu *next;
+    FoodMenu *prev;
 };
 
 FoodMenu *firstMenu;
@@ -19,7 +20,7 @@ bool isMenuEmpty(){
 }
 
 void createMenu(string kategori, string nama, int harga){
-    FoodMenu *newMenu, *current;
+    FoodMenu *newMenu, *current, *nextMenu;
     newMenu = new FoodMenu;
     newMenu->nama = nama;
     newMenu->kategori = kategori;
@@ -29,6 +30,12 @@ void createMenu(string kategori, string nama, int harga){
     if(!isMenuEmpty()){
         current = firstMenu;
         while(current->next != NULL){
+            if(current->kategori == newMenu->kategori && current->next->kategori != current->kategori){
+                nextMenu = current->next;
+                nextMenu->prev = newMenu;
+                newMenu->next = nextMenu;
+                break;
+            }
             current = current->next;
         }
         current->next = newMenu;
@@ -84,12 +91,19 @@ int main(){
     // cout << paketan[0].nama << endl;
 
     createMenu("Lauk", "Ayam Bakar", 15000);
-    createMenu("Lauk", "Ayam Goreng", 10000);
+    createMenu("Lauk", "Ayam Goreng", 13000);
     createMenu("Lauk", "Ayam Geprek", 17000);
 
     createMenu("Nasi", "Nasi Putih", 5000);
     createMenu("Nasi", "Nasi Kuning", 7000);
     createMenu("Nasi", "Nasi Kebuli", 10000);
+
+    createMenu("Minuman", "Es Teh Manis", 7000);
+    createMenu("Minuman", "Air Mineral", 4000);
+    createMenu("Minuman", "Es Jeruk", 8000);
+
+    createMenu("Lauk", "Ikan Bakar", 23000);
+    createMenu("Nasi", "Nasi Goreng", 13000);
     
     printMenu();
 
