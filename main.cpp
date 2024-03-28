@@ -52,6 +52,9 @@ void printMenu(){
 
     // TESTING DOUBLE LINKED LIST
         while(current->next != NULL){
+            if(current->prev == NULL || current->kategori != current->prev->kategori){
+                cout << "[" << current->kategori << "]\n";
+            }
             cout << current->nama << "\t\tRp " << current->harga << "\n";
             current = current->next;
         }
