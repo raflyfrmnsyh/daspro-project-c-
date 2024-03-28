@@ -50,21 +50,22 @@ void printMenu(){
         //     current = current->next;
         // }
 
-    // TESTING DOUBLE LINKED LIST
-        while(current->next != NULL){
+        while(current != NULL){
             if(current->prev == NULL || current->kategori != current->prev->kategori){
-                cout << "[" << current->kategori << "]\n";
+                cout << "\n[" << current->kategori << "]\n";
             }
             cout << current->nama << "\t\tRp " << current->harga << "\n";
             current = current->next;
         }
-        cout << current->nama << "\t\tRp " << current->harga << "\n";
 
-        current = current->prev;
-        while(current != NULL){
-            cout << current->nama << "\t\tRp " << current->harga << "\n";
-            current = current->prev;
-        }
+    // TESTING DOUBLE LINKED LIST
+        // cout << current->nama << "\t\tRp " << current->harga << "\n";
+
+        // current = current->prev;
+        // while(current != NULL){
+        //     cout << current->nama << "\t\tRp " << current->harga << "\n";
+        //     current = current->prev;
+        // }
     }
 }
 
@@ -86,6 +87,10 @@ int main(){
     createMenu("Lauk", "Ayam Goreng", 10000);
     createMenu("Lauk", "Ayam Geprek", 17000);
 
+    createMenu("Nasi", "Nasi Putih", 5000);
+    createMenu("Nasi", "Nasi Kuning", 7000);
+    createMenu("Nasi", "Nasi Kebuli", 10000);
+    
     printMenu();
 
     
