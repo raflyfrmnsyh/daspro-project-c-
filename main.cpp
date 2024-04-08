@@ -13,6 +13,7 @@ struct FoodMenu{
 
 struct Cart{
     string *nama;
+    string *id;
     int *harga;
     int qty;
     Cart *next;
@@ -134,6 +135,7 @@ void addOrder(){
         Cart *currentCart, *prevCart, *newCart;
         newCart = new Cart;
         newCart->nama = &current->nama;
+        newCart->id = &current->id;
         newCart->harga = &current->harga;
         newCart->next = NULL;
 
