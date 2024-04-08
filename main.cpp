@@ -102,12 +102,14 @@ FoodMenu * cariMenu(string namaMenu){
     }
 }
 
-void addMenu(){
+void addOrder(){
     string idMenu;
+    int jumlah;
     FoodMenu *current;
 
     cout << "\nId Menu: ";
-    getline(cin, idMenu);
+    // getline(cin, idMenu);
+    cin >> idMenu;
     cout << "Id menu yg Anda Pesan: " << idMenu << endl;
     // cout << cariMenu(idMenu)->harga;
     if(!isMenuEmpty()){
@@ -119,12 +121,15 @@ void addMenu(){
             current = current->next;
         }
 
-        if(current != NULL){
-            cout << current->harga;
-        } else{
+        // kalo id menu tidak tersedia
+        if(current == NULL){
             cout << "Menu ga adaaa";
             return;
         }
+
+        cout << current->nama << " Rp " << current->harga << endl;
+        cout << "\tJumlah\t: ";
+        cin >> jumlah;
 
         Cart *currentCart, *prevCart, *newCart;
         newCart = new Cart;
@@ -132,55 +137,46 @@ void addMenu(){
         newCart->harga = &current->harga;
         newCart->next = NULL;
 
+        // kalo cart tidak kosong...
         if(firstCart != NULL){
-            
             currentCart = firstCart;
+            // lakukan iterasi
             while(currentCart != NULL){
                 if(currentCart->next == NULL){
                     prevCart = currentCart;
                 }
+                // kalo menu yg dipesan udh dipesan sebelumnya, tambahin jumlahnya
                 if(*currentCart->nama == current->nama){
-                    cout << "ada ayam bakar\n";
-                    currentCart->qty += 1;
+                    currentCart->qty += jumlah;
                     delete newCart;
                     return;
                 }
                 currentCart = currentCart->next;
+                newCart->qty = jumlah;
+                prevCart->next = newCart;
             }
-            prevCart->next = newCart;
-            newCart->qty = 1;
-
-        } else {
-            newCart->qty = 1;
+        } else{
+            newCart->qty = jumlah;
             firstCart = newCart;
         }
+
+        return;
     }
 }
 
 void printCart(){
     if(firstCart != NULL){
         Cart *current = firstCart;
+        cout << "========================" <<endl;
         while(current != NULL){
             cout << "\n" << *current->nama << "\t\t" << *current->harga << " x " << current->qty << " = " << *current->harga * current->qty << "\n";
             current = current->next;
         }
+        cout << "========================" <<endl;
     }
 }
 
-void fileInit(){
-
-}
-
-
-int main(){
-    // ini testing dulu
-    // struct FoodMenu paketan[3] = {
-    //     {"Ayam", 1000},
-    //     {"Bebek", 2000},
-    //     {"Sapi", 3000}
-    // };
-    // cout << paketan[0].nama << endl;
-
+void initApp(){
     createMenu("Lauk", "a1", "Ayam Bakar", 15000);
     createMenu("Lauk", "a2", "Ayam Goreng", 13000);
     createMenu("Lauk", "a3", "Ayam Geprek", 17000);
@@ -195,13 +191,71 @@ int main(){
 
     createMenu("Lauk", "a4", "Ikan Bakar", 23000);
     createMenu("Nasi", "n4", "Nasi Goreng", 13000);
+}
+
+
+int main(){
+    // ini testing dulu
+    // struct FoodMenu paketan[3] = {
+    //     {"Ayam", 1000},
+    //     {"Bebek", 2000},
+    //     {"Sapi", 3000}
+    // };
+    // cout << paketan[0].nama << endl;
+
+    initApp();
+    int opsi;
     
+    // 1. tambah pesanan (addOrder())
+    // 2. lihat pesanan (printCart())
+    // 3. hapus pesanan
+    // 4. cetak invoice
+
+    while(true){
+        cout << "===== Selamat datang di Restoran 69! =====\n";
+        cout << "1. Tambah Pesanan\n";
+        cout << "2. Lihat Pesanan\n";
+        cout << "3. Hapus Pesanan\n";
+        cout << "4. Checkout dan Cetak Invoice\n";
+        cout << "5. Keluar\n";
+        cout << "\nOpsi\t: ";
+        cin >> opsi;
+
+        switch (opsi)
+        {
+        case 1:
+            printMenu();
+            addOrder();
+            break;
+
+        case 2:
+            printCart();
+            break;
+
+        case 3:
+            cout << "\n=== Hapus pesanan ===\n";
+            break;
+        
+        case 4:
+            cout << "\n=== Checkout ===\n";
+            break;
+
+        case 5:
+        return 0;
+
+        default:
+            break;
+        }
+
+    }
     printMenu();
 
-    addMenu();
-    addMenu();
+    addOrder();
+    addOrder();
 
     printCart();
 
+    cout << "Enter untuk lanjutkan";
+    cin.get();
     
 }
