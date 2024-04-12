@@ -2,6 +2,16 @@
 #include <string>
 using namespace std;
 
+const int maxUsers = 20;
+const int numColumns = 3;
+string users[maxUsers][numColumns];
+
+string (*pUsers)[numColumns] = users;
+
+int numUsers = 0;
+
+#include "UserGate.h"
+
 struct FoodMenu{
     string kategori;
     string id;
@@ -63,11 +73,6 @@ void printMenu(){
     if(!isMenuEmpty()){
         current = firstMenu;
 
-        // while(current != NULL){
-        //     cout << current->nama << "\t\tRp " << current->harga << "\n";
-        //     current = current->next;
-        // }
-
         while(current != NULL){
             if(current->prev == NULL || current->kategori != current->prev->kategori){
                 cout << "\n[id]\t[" << current->kategori << "]\n";
@@ -75,15 +80,6 @@ void printMenu(){
             cout << current->id << "\t" << current->nama << "\t\tRp " << current->harga << "\n";
             current = current->next;
         }
-
-    // TESTING DOUBLE LINKED LIST
-        // cout << current->nama << "\t\tRp " << current->harga << "\n";
-
-        // current = current->prev;
-        // while(current != NULL){
-        //     cout << current->nama << "\t\tRp " << current->harga << "\n";
-        //     current = current->prev;
-        // }
     }
 }
 
@@ -112,7 +108,7 @@ void addOrder(){
     // getline(cin, idMenu);
     cin >> idMenu;
     cout << "Id menu yg Anda Pesan: " << idMenu << endl;
-    // cout << cariMenu(idMenu)->harga;
+
     if(!isMenuEmpty()){
         current = firstMenu;
         while(current != NULL){
@@ -157,6 +153,7 @@ void addOrder(){
                 newCart->qty = jumlah;
                 prevCart->next = newCart;
             }
+        // kalo Cart kosong, buat Cart baru
         } else{
             newCart->qty = jumlah;
             firstCart = newCart;
@@ -195,6 +192,7 @@ void initApp(){
     createMenu("Nasi", "n4", "Nasi Goreng", 13000);
 }
 
+#include "Admin.h"
 
 int main(){
     // ini testing dulu
@@ -206,6 +204,7 @@ int main(){
     // cout << paketan[0].nama << endl;
 
     initApp();
+    loginGate();
     int opsi;
     
     // 1. tambah pesanan (addOrder())
