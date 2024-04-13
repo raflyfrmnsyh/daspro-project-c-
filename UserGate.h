@@ -8,6 +8,8 @@ extern const int numColumns;
 extern int numUsers;
 extern string (*pUsers)[numColumns];
 
+extern string* pUserProfile[numColumns];
+
 void printArrayUsers(){
     for(int i = 0; i < maxUsers; i++){
         // [i][0]
@@ -80,14 +82,26 @@ void loginUser() {
     cin >> password;
 
     bool userFound = false;
+
     for (int i = 0; i < numUsers; ++i) {
         if (*(*(pUsers + i) + 0) == username && *(*(pUsers + i) + 1) == password) {
             cout << "Login berhasil. Selamat datang, " << username << "!" << endl;
             cout << "Role: " << *(*(pUsers + i) + 2) << endl;
+
+            // saving user profile (usnm, pw, role)
+            pUserProfile[0] = (*(pUsers + i) + 0); // username
+            pUserProfile[1] = (*(pUsers + i) + 1); // password
+            pUserProfile[2] = (*(pUsers + i) + 2); // role
+
+            cout << pUserProfile[0] << " : " << *pUserProfile[0] << endl;
+            cout << pUserProfile[1] << " : " << *pUserProfile[1] << endl;
+            cout << pUserProfile[2] << " : " << *pUserProfile[2] << endl;
+
             userFound = true;
             break;
         }
     }
+
     if (!userFound) {
         cout << "Login gagal. Silakan coba lagi." << endl;
     }
@@ -95,7 +109,7 @@ void loginUser() {
 
 void loginGate(){
     createAccount("admin1", "admin123", "admin");
-    createAccount("cust1", "cust123", "cust");
+    createAccount("cust1", "cust123", "customer");
 
     int choice;
     do {
@@ -117,7 +131,7 @@ void loginGate(){
                 break;
             case 2:
                 loginUser();
-                break;
+                return;
             case 3:
                 cout << "Terima kasih. Sampai jumpa!" << endl;
                 break;

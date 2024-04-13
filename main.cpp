@@ -2,13 +2,19 @@
 #include <string>
 using namespace std;
 
+// <user db>
 const int maxUsers = 20;
 const int numColumns = 3;
-string users[maxUsers][numColumns];
-
-string (*pUsers)[numColumns] = users;
 
 int numUsers = 0;
+
+string users[maxUsers][numColumns];
+string (*pUsers)[numColumns] = users;
+
+string userProfile[numColumns];
+string* pUserProfile[numColumns];
+
+// </user db>
 
 #include "UserGate.h"
 
@@ -39,35 +45,6 @@ bool isMenuEmpty(){
     }
 }
 
-void createMenu(string kategori, string id, string nama, int harga){
-    FoodMenu *newMenu, *current, *nextMenu;
-    newMenu = new FoodMenu;
-    newMenu->nama = nama;
-    newMenu->id = id;
-    newMenu->kategori = kategori;
-    newMenu->harga = harga;
-    newMenu->next = NULL;
-
-    if(!isMenuEmpty()){
-        current = firstMenu;
-        while(current->next != NULL){
-            if(current->kategori == newMenu->kategori && current->next->kategori != current->kategori){
-                nextMenu = current->next;
-                nextMenu->prev = newMenu;
-                newMenu->next = nextMenu;
-                break;
-            }
-            current = current->next;
-        }
-        current->next = newMenu;
-        newMenu->prev = current;
-
-    } else {
-        firstMenu = newMenu;
-        firstMenu->prev = NULL;
-    }
-}
-
 void printMenu(){
     FoodMenu *current;
     if(!isMenuEmpty()){
@@ -83,97 +60,24 @@ void printMenu(){
     }
 }
 
-FoodMenu * cariMenu(string namaMenu){
-    FoodMenu *current;
-    if(!isMenuEmpty()){
-        current = firstMenu;
-        while(current != NULL){
-            if(current->nama == namaMenu){
-                return current;
-            }
-            current = current->next;
-        }
-        return NULL;
-    } else {
-        return NULL;
-    }
-}
+// FoodMenu * cariMenu(string namaMenu){
+//     FoodMenu *current;
+//     if(!isMenuEmpty()){
+//         current = firstMenu;
+//         while(current != NULL){
+//             if(current->nama == namaMenu){
+//                 return current;
+//             }
+//             current = current->next;
+//         }
+//         return NULL;
+//     } else {
+//         return NULL;
+//     }
+// }
 
-void addOrder(){
-    string idMenu;
-    int jumlah;
-    FoodMenu *current;
-
-    cout << "\nId Menu: ";
-    // getline(cin, idMenu);
-    cin >> idMenu;
-    cout << "Id menu yg Anda Pesan: " << idMenu << endl;
-
-    if(!isMenuEmpty()){
-        current = firstMenu;
-        while(current != NULL){
-            if(current->id == idMenu){
-                break;
-            }
-            current = current->next;
-        }
-
-        // kalo id menu tidak tersedia
-        if(current == NULL){
-            cout << "Menu ga adaaa";
-            return;
-        }
-
-        cout << current->nama << " Rp " << current->harga << endl;
-        cout << "\tJumlah\t: ";
-        cin >> jumlah;
-
-        Cart *currentCart, *prevCart, *newCart;
-        newCart = new Cart;
-        newCart->nama = &current->nama;
-        newCart->id = &current->id;
-        newCart->harga = &current->harga;
-        newCart->next = NULL;
-
-        // kalo cart tidak kosong...
-        if(firstCart != NULL){
-            currentCart = firstCart;
-            // lakukan iterasi
-            while(currentCart != NULL){
-                if(currentCart->next == NULL){
-                    prevCart = currentCart;
-                }
-                // kalo menu yg dipesan udh dipesan sebelumnya, tambahin jumlahnya
-                if(*currentCart->nama == current->nama){
-                    currentCart->qty += jumlah;
-                    delete newCart;
-                    return;
-                }
-                currentCart = currentCart->next;
-                newCart->qty = jumlah;
-                prevCart->next = newCart;
-            }
-        // kalo Cart kosong, buat Cart baru
-        } else{
-            newCart->qty = jumlah;
-            firstCart = newCart;
-        }
-
-        return;
-    }
-}
-
-void printCart(){
-    if(firstCart != NULL){
-        Cart *current = firstCart;
-        cout << "========================" <<endl;
-        while(current != NULL){
-            cout << "\n" << *current->nama << "\t\t" << *current->harga << " x " << current->qty << " = " << *current->harga * current->qty << "\n";
-            current = current->next;
-        }
-        cout << "========================" <<endl;
-    }
-}
+#include "Customer.h"
+#include "Admin.h"
 
 void initApp(){
     createMenu("Lauk", "a1", "Ayam Bakar", 15000);
@@ -192,70 +96,19 @@ void initApp(){
     createMenu("Nasi", "n4", "Nasi Goreng", 13000);
 }
 
-#include "Admin.h"
-
 int main(){
-    // ini testing dulu
-    // struct FoodMenu paketan[3] = {
-    //     {"Ayam", 1000},
-    //     {"Bebek", 2000},
-    //     {"Sapi", 3000}
-    // };
-    // cout << paketan[0].nama << endl;
-
     initApp();
     loginGate();
-    int opsi;
-    
-    // 1. tambah pesanan (addOrder())
-    // 2. lihat pesanan (printCart())
-    // 3. hapus pesanan
-    // 4. cetak invoice
 
-    while(true){
-        cout << "===== Selamat datang di Restoran 69! =====\n";
-        cout << "1. Tambah Pesanan\n";
-        cout << "2. Lihat Pesanan\n";
-        cout << "3. Hapus Pesanan\n";
-        cout << "4. Checkout dan Cetak Invoice\n";
-        cout << "5. Keluar\n";
-        cout << "\nOpsi\t: ";
-        cin >> opsi;
-
-        switch (opsi)
-        {
-        case 1:
-            printMenu();
-            addOrder();
-            break;
-
-        case 2:
-            printCart();
-            break;
-
-        case 3:
-            cout << "\n=== Hapus pesanan ===\n";
-            break;
-        
-        case 4:
-            cout << "\n=== Checkout ===\n";
-            break;
-
-        case 5:
-        return 0;
-
-        default:
-            break;
-        }
-
+    if(*(pUserProfile[2]) == "customer"){
+        customerDashboard();
+    } else if (*(pUserProfile[2]) == "admin"){
+        adminDashboard();
     }
-    printMenu();
+    
 
-    addOrder();
-    addOrder();
-
-    printCart();
-
+    // <admin dashboard>
+    // </admin dashboard>
     cout << "Enter untuk lanjutkan";
     cin.get();
     
