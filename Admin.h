@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include "ValidInput.h"
+#include "rafly.h"
+#include "UserGate.h"
 using namespace std;
 
 void createMenu(string kategori, string id, string nama, int harga){
@@ -92,7 +94,8 @@ void adminDashboard(){
         cout << "2. Buat Menu Baru\n";
         cout << "3. Hapus Menu\n";
         cout << "4. Cetak Laporan Pendapatan\n";
-        cout << "5. Keluar\n";
+        cout << "5. Logout\n";
+        cout << "6. Keluar\n";
         cout << "\nOpsi\t: ";
 
         opsi = inputValidInt();
@@ -113,9 +116,14 @@ void adminDashboard(){
 
         case 4:
             cout << "\n=== Cetak Laporan Pendapatan ===\n";
+            viewLaporan();
             break;
         
         case 5:
+            return;
+
+        case 6:
+            isContinue = false;
             return;
 
         default:

@@ -1,6 +1,8 @@
 #include <iostream>
 #include <string>
 #include "ValidInput.h"
+
+#pragma once
 using namespace std;
 
 extern const int maxUsers;
@@ -115,9 +117,6 @@ void loginUser() {
 }
 
 void loginGate(){
-    createAccount("admin1", "admin123", "admin");
-    createAccount("cust1", "cust123", "customer");
-
     int choice;
     while(true) {
         cout << "\nMENU AWAL" << endl;

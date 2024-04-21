@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include "ValidInput.h"
+#include "UserGate.h"
 using namespace std;
 
 void addOrder(){
@@ -9,7 +10,6 @@ void addOrder(){
     FoodMenu *current;
 
     cout << "\nId Menu: ";
-    // cin >> idMenu;
     idMenu = inputOneWord();
     cout << "Id menu yg Anda Pesan: " << idMenu << endl;
 
@@ -30,7 +30,7 @@ void addOrder(){
 
         cout << current->nama << " Rp " << current->harga << endl;
         cout << "\tJumlah\t: ";
-        cin >> jumlah;
+        jumlah = inputValidInt();
 
         Cart *currentCart, *prevCart, *newCart;
         newCart = new Cart;
@@ -38,44 +38,178 @@ void addOrder(){
         newCart->id = &current->id;
         newCart->harga = &current->harga;
         newCart->next = NULL;
+        TOTAL_PAYMENT += (current->harga * jumlah);
 
         // kalo cart tidak kosong...
         if(firstCart != NULL){
             currentCart = firstCart;
+
             // lakukan iterasi
             while(currentCart != NULL){
                 if(currentCart->next == NULL){
                     prevCart = currentCart;
                 }
+
                 // kalo menu yg dipesan udh dipesan sebelumnya, tambahin jumlahnya
                 if(*currentCart->nama == current->nama){
                     currentCart->qty += jumlah;
                     delete newCart;
                     return;
                 }
+
                 currentCart = currentCart->next;
+            }
                 newCart->qty = jumlah;
                 prevCart->next = newCart;
-            }
+                newCart->prev = prevCart;
+            
         // kalo Cart kosong, buat Cart baru
         } else{
             newCart->qty = jumlah;
             firstCart = newCart;
         }
-        
-        return;
     }
 }
 
 void printCart(){
+    int total = 0;
     if(firstCart != NULL){
         Cart *current = firstCart;
-        cout << "========================" <<endl;
+        cout << "------------------------------------------------------" <<endl;
         while(current != NULL){
-            cout << "\n" << *current->nama << "\t\t" << *current->harga << " x " << current->qty << " = " << *current->harga * current->qty << "\n";
+            cout << *current->id << "\t" << *current->nama << "\t\t" << *current->harga << " x " << current->qty << " = " << *current->harga * current->qty << "\n";
             current = current->next;
         }
-        cout << "========================" <<endl;
+        cout << "------------------------------------------------------" <<endl;
+        cout << "\t\t\tTotal\t: " << TOTAL_PAYMENT << endl;
+    } else {
+        cout << "------------------------------------------------------" <<endl;
+        cout << "             (Belum ada menu dipesan)                 \n";
+        cout << "------------------------------------------------------" <<endl;
+    }
+}
+
+void removeOrder(){
+    Cart *current;
+    string id;
+    int jumlah;
+
+    cout << "ID pesanan yang ingin dikurangi: ";
+    id = inputOneWord();
+    current = firstCart;
+    bool isFound = false;
+
+    while(current != NULL){
+        if(id == *current->id){
+            isFound = true;
+            break;
+        }
+        current = current->next;
+        cout << "loop\n";
+    }
+
+    // jika id menu ada di cart...
+    if(isFound){
+        cout << "Kurangi sebanyak: ";
+        jumlah = inputValidInt();
+        while(current->qty < jumlah){
+            cout << "Jumlah pesanan yang dikurangi tidak boleh lebih dari yang jumlah yang dipesan!\nKurangi sebanyak: ";
+            jumlah = inputValidInt();
+        }
+        current->qty -= jumlah;
+        TOTAL_PAYMENT -= (jumlah * *current->harga);
+
+        if(current->qty == 0){
+            if(current == firstCart){
+                firstCart = current->next;
+
+                if(firstCart != NULL){
+                    firstCart->prev = NULL;
+                }
+
+                delete current;
+            }
+
+            else if(current->prev != NULL && current->next != NULL){
+                current->prev->next = current->next;
+                current->next->prev = current->prev;
+                delete current;
+            }
+
+            else if(current->next == NULL){
+                current->prev->next = NULL;
+                delete current;
+            }
+        }
+    } else {
+        cout << "ID menu tidak ditemukan!\n";
+    }
+
+    printCart();    
+}
+
+void deleteFirstCart(){
+    Cart *current;
+    if(firstCart == NULL){
+        return;
+    }
+    current = firstCart;
+    firstCart = firstCart->next;
+    if(firstCart != NULL){
+        firstCart->prev = NULL;
+    }
+    current->next = NULL;
+    delete current;
+}
+
+void deleteAllCart(){
+    while(firstCart != NULL){
+        deleteFirstCart();
+    }
+}
+
+void addTransaction(){
+    Transaction *newTransaction, *currTransaction;
+    newTransaction = new Transaction;
+    newTransaction->namaCust = *pUserProfile[0];
+    newTransaction->total = TOTAL_PAYMENT;
+    TOTAL_PAYMENT = 0;
+
+    // kalo transaksi belum pernah ada..
+    if(firstTransaction == NULL){
+        newTransaction->next = NULL;
+        firstTransaction = newTransaction;
+
+    // kalo udah pernah ada...
+    } else {
+        newTransaction->next = firstTransaction;
+        firstTransaction = newTransaction;
+    }
+}
+
+void checkout(){
+    string confirm;
+    printCart();
+    cout << "\nYakin ingin checkout dan mencetak invoice? (y/n): ";
+    confirm = inputOneWord();
+
+    if(confirm != "y"){
+        cout << "Tidak jadi checkout\n";
+        return;
+    } else {
+        // cetakInvoice()
+        // addTransaction()
+        // deleteAllCart()
+        // TOTAL_PAYMENT = 0
+
+        cout << "\n=================== Restoran 69 ======================\n";
+        cout << "Nama Pelanggan\t: " << **(pUserProfile + 0) << endl;
+        printCart();
+        cout << "======================================================\n";
+        addTransaction();
+        // menghapus seluruh pesanan menu
+        deleteAllCart();
+        printCart();
     }
 }
 
@@ -83,14 +217,15 @@ void customerDashboard(){
     int opsi;
 
     while(true){
-        cout << "===== Selamat datang di Restoran 69! =====\n";
+        cout << "\n===== Selamat datang di Restoran 69! =====\n";
         cout << "1. Tambah Pesanan\n";
         cout << "2. Lihat Pesanan\n";
-        cout << "3. Hapus Pesanan\n";
+        cout << "3. Kurangi Pesanan\n";
         cout << "4. Checkout dan Cetak Invoice\n";
-        cout << "5. Keluar\n";
+        cout << "5. Logout\n";
+        cout << "6. Keluar Aplikasi\n";
         cout << "\nOpsi\t: ";
-        cin >> opsi;
+        opsi = inputValidInt();
 
         switch (opsi)
         {
@@ -101,18 +236,27 @@ void customerDashboard(){
 
         case 2:
             printCart();
+            wait();
             break;
 
         case 3:
-            cout << "\n=== Hapus pesanan ===\n";
+            cout << "\n=== Kurangi pesanan ===\n";
+            printCart();
+            removeOrder();
             break;
         
         case 4:
             cout << "\n=== Checkout ===\n";
+            checkout();
             break;
 
         case 5:
-        return;
+            deleteAllCart();
+            return;
+
+        case 6:
+            isContinue = false;
+            return;
 
         default:
             break;
