@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include "ValidInput.h"
 using namespace std;
 
 void addOrder(){
@@ -8,8 +9,8 @@ void addOrder(){
     FoodMenu *current;
 
     cout << "\nId Menu: ";
-    // getline(cin, idMenu);
-    cin >> idMenu;
+    // cin >> idMenu;
+    idMenu = inputOneWord();
     cout << "Id menu yg Anda Pesan: " << idMenu << endl;
 
     if(!isMenuEmpty()){
@@ -61,7 +62,7 @@ void addOrder(){
             newCart->qty = jumlah;
             firstCart = newCart;
         }
-
+        
         return;
     }
 }
@@ -80,11 +81,6 @@ void printCart(){
 
 void customerDashboard(){
     int opsi;
-    
-    // 1. tambah pesanan (addOrder())
-    // 2. lihat pesanan (printCart())
-    // 3. hapus pesanan
-    // 4. cetak invoice
 
     while(true){
         cout << "===== Selamat datang di Restoran 69! =====\n";

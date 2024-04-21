@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include "ValidInput.h"
 using namespace std;
 
 void createMenu(string kategori, string id, string nama, int harga){
@@ -47,38 +48,31 @@ void addMenu(){
     string newId, newName, newCategory, confirm;
     int newPrice;
 
-    // input id menu sekaligus mencegah duplikasi
-    cin.ignore();
-    do{
-        cout << "\n\tID menu baru: ";
-        getline(cin, newId); cout << endl;
+    cout << "\n\tID menu baru: ";
+    newId = inputOneWord();
+    cout << endl;
+    // mengecek duplikasi id menu
+    while(menuIdExists(newId)){
+        cout << "ID menu sudah ada, gunakan ID lain!\n";
+        newId = inputOneWord();
+    }
 
-        if(menuIdExists(newId)){
-            cout << "ID menu sudah ada, gunakan ID lain!\n";
-        } else {
-            break;
-        }
-    } while (true);
-
-    // cin.ignore();
     cout << "\n\tNama menu baru: ";
     getline(cin, newName); cout << endl;
 
-    // cin.ignore();
     cout << "\n\tKategori menu baru: ";
     getline(cin, newCategory); cout << endl;
 
-    // cin.ignore();
     cout << "\n\tHarga menu baru: ";
-    cin >> newPrice;
+    newPrice = inputValidInt();
 
     cout << "ID\t\t: " << newId << endl;
     cout << "Nama Menu\t: "<< newName << endl;
     cout << "Kategori\t: " << newCategory << endl;
     cout << "Harga\t\t: " << newPrice << endl;
 
-    cout << "Yakin ingin menambahkan data tsb? (y/n)";
-    cin >> confirm;
+    cout << "Yakin ingin menambahkan data tsb? (y/n): ";
+    confirm = inputOneWord();
 
     if(confirm == "y"){
         createMenu(newCategory, newId, newName, newPrice);
@@ -91,40 +85,41 @@ void addMenu(){
 
 void adminDashboard(){
     int opsi;
-    
-    // 1. Buat menu (addMenu())
-    // 2. Hapus menu (deleteMenu())
-    // 3. Cetak Laporan Pendapatan
-    // 4. Keluar
 
     while(true){
         cout << "===== Selamat datang di Restoran 69! =====\n";
-        cout << "1. Buat Menu Baru\n";
-        cout << "2. Hapus Menu\n";
-        cout << "3. Cetak Laporan Pendapatan\n";
-        cout << "4. Keluar\n";
+        cout << "1. Lihat Daftar Menu\n";
+        cout << "2. Buat Menu Baru\n";
+        cout << "3. Hapus Menu\n";
+        cout << "4. Cetak Laporan Pendapatan\n";
+        cout << "5. Keluar\n";
         cout << "\nOpsi\t: ";
-        cin >> opsi;
 
-        switch (opsi)
-        {
+        opsi = inputValidInt();
+
+        switch (opsi){
         case 1:
+            printMenu();
+            wait();
+            break;
+        case 2:
             printMenu();
             addMenu();
             break;
 
-        case 2:
+        case 3:
             cout << "\n=== Hapus Menu ===\n";
             break;
 
-        case 3:
+        case 4:
             cout << "\n=== Cetak Laporan Pendapatan ===\n";
             break;
         
-        case 4:
+        case 5:
             return;
 
         default:
+            cout << "Opsi tidak valid!\n";
             break;
         }
 

@@ -105,10 +105,6 @@ int main(){
     } else if (*(pUserProfile[2]) == "admin"){
         adminDashboard();
     }
-    
-
-    // <admin dashboard>
-    // </admin dashboard>
     cout << "Enter untuk lanjutkan";
     cin.get();
     

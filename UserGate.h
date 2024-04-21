@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include "ValidInput.h"
 using namespace std;
 
 extern const int maxUsers;
@@ -45,22 +46,27 @@ if (numUsers < maxUsers) {
         while (true)
         {
             cout << "Masukkan username: ";
-            cin >> username;
+            username = inputOneWord();
 
-            if (isUsernameTaken(username)) {
-            cout << "Username sudah terpakai. Silakan gunakan username lain." << endl;
-            return;
+            while(isUsernameTaken(username)){
+                cout << "Username sudah digunakan!\nUsername: ";
+                username = inputOneWord();
             }
+            
             cout << "Masukkan password: ";
-            cin >> password;
+            password = inputOneWord();
+
             cout << "Masukkan role\n\t1: customer\n\t2: admin ";
-            cin >> role;
+            role = inputOneWord();
+
             if (role == "1") {
                 role = "customer";
                 break;
+
             } else if (role == "2") {
                 role = "admin";
                 break;
+
             } else {
                 cout << "Role tidak valid. Silakan pilih role yang sesuai." << endl;
                 return;
@@ -77,9 +83,10 @@ if (numUsers < maxUsers) {
 void loginUser() {
     string username, password;
     cout << "Masukkan username: ";
-    cin >> username;
+    username = inputOneWord();
+
     cout << "Masukkan password: ";
-    cin >> password;
+    password = inputOneWord();
 
     bool userFound = false;
 
@@ -112,7 +119,7 @@ void loginGate(){
     createAccount("cust1", "cust123", "customer");
 
     int choice;
-    do {
+    while(true) {
         cout << "\nMENU AWAL" << endl;
         cout << "1. Daftar" << endl;
         cout << "2. Login" << endl;
@@ -124,19 +131,23 @@ void loginGate(){
         cout << endl;
 
         cout << "Pilihan Anda: ";
-        cin >> choice;
+        choice = inputValidInt();
+
         switch (choice) {
             case 1:
                 registerUser();
                 break;
+
             case 2:
                 loginUser();
                 return;
+
             case 3:
                 cout << "Terima kasih. Sampai jumpa!" << endl;
-                break;
+                return;
+
             default:
                 cout << "Pilihan tidak valid. Silakan coba lagi." << endl;
         }
-    } while (choice != 3);
+    }
 }
