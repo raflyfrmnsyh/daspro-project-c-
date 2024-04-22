@@ -77,11 +77,11 @@ void printCart(){
         Cart *current = firstCart;
         cout << "------------------------------------------------------" <<endl;
         while(current != NULL){
-            cout << *current->id << "\t" << *current->nama << "\t\t" << *current->harga << " x " << current->qty << " = " << *current->harga * current->qty << "\n";
+            cout << *current->id << "\t" << *current->nama << "\t\t" << "Rp." << *current->harga << " x " << current->qty << " = Rp." << *current->harga * current->qty << "\n";
             current = current->next;
         }
         cout << "------------------------------------------------------" <<endl;
-        cout << "\t\t\tTotal\t: " << TOTAL_PAYMENT << endl;
+        cout << "\t\t\tTotal\t: Rp." << TOTAL_PAYMENT << endl;
     } else {
         cout << "------------------------------------------------------" <<endl;
         cout << "             (Belum ada menu dipesan)                 \n";
@@ -206,8 +206,8 @@ void checkout(){
         cout << "Nama Pelanggan\t: " << **(pUserProfile + 0) << endl;
         printCart();
         cout << "======================================================\n";
+
         addTransaction();
-        // menghapus seluruh pesanan menu
         deleteAllCart();
         printCart();
     }
@@ -217,7 +217,7 @@ void customerDashboard(){
     int opsi;
 
     while(true){
-        cout << "\n===== Selamat datang di Restoran 69! =====\n";
+        cout << "\n\n===== Selamat datang di Restoran 69! =====\n";
         cout << "1. Tambah Pesanan\n";
         cout << "2. Lihat Pesanan\n";
         cout << "3. Kurangi Pesanan\n";
@@ -230,11 +230,13 @@ void customerDashboard(){
         switch (opsi)
         {
         case 1:
+            cout << "\n=== Tambah pesanan ===\n";
             printMenu();
             addOrder();
             break;
 
         case 2:
+            cout << "\n=== Lihat pesanan ===\n";
             printCart();
             wait();
             break;
@@ -251,11 +253,12 @@ void customerDashboard(){
             break;
 
         case 5:
+            USER_FOUND = false;
             deleteAllCart();
             return;
 
         case 6:
-            isContinue = false;
+            IS_CONTINUE = false;
             return;
 
         default:

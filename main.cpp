@@ -3,17 +3,18 @@
 using namespace std;
 
 // <user db>
-const int maxUsers = 20;
-const int numColumns = 3;
+const int MAX_USER = 20;
+const int NUM_COLUMNS = 3;
 
 int numUsers = 0;
-bool isContinue = true;
+bool IS_CONTINUE = true;
+bool USER_FOUND = false;
 
-string users[maxUsers][numColumns];
-string (*pUsers)[numColumns] = users;
+string users[MAX_USER][NUM_COLUMNS];
+string (*pUsers)[NUM_COLUMNS] = users;
 
 // string userProfile[numColumns];
-string* pUserProfile[numColumns];
+string* pUserProfile[NUM_COLUMNS];
 
 // </user db>
 
@@ -72,22 +73,6 @@ void printMenu(){
     }
 }
 
-// FoodMenu * cariMenu(string namaMenu){
-//     FoodMenu *current;
-//     if(!isMenuEmpty()){
-//         current = firstMenu;
-//         while(current != NULL){
-//             if(current->nama == namaMenu){
-//                 return current;
-//             }
-//             current = current->next;
-//         }
-//         return NULL;
-//     } else {
-//         return NULL;
-//     }
-// }
-
 #include "Customer.h"
 #include "Admin.h"
 #include "rafly.h"
@@ -108,19 +93,21 @@ void initApp(){
     createMenu("Lauk", "a4", "Ikan Bakar", 23000);
     createMenu("Nasi", "n4", "Nasi Goreng", 13000);
 
-    createAccount("admin1", "admin123", "admin");
-    createAccount("c", "c", "customer");
+    createAccount("admin", "admin", "admin");
+    createAccount("caca", "caca", "customer");
 }
 
 int main(){
     initApp();
-    while(isContinue){
+    while(IS_CONTINUE){
         loginGate();
 
-        if(*(pUserProfile[2]) == "customer"){
-            customerDashboard();
-        } else if (*(pUserProfile[2]) == "admin"){
-            adminDashboard();
+        if(USER_FOUND){
+            if(*(pUserProfile[2]) == "customer"){
+                customerDashboard();
+            } else if (*(pUserProfile[2]) == "admin"){
+                adminDashboard();
+            }
         }
     }
     cout << "Enter untuk lanjutkan";

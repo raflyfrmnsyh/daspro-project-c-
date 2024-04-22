@@ -85,11 +85,43 @@ void addMenu(){
 
 }
 
+void printSaleReport() {
+    Transaction *curr;
+    int total = 0;
+
+    if(firstTransaction != NULL){
+        curr = firstTransaction;
+        int count = 1;
+
+        cout << setw(55) << "\n=======================================================\n";
+        cout << setw(6) << "NO" << setw(15) << "Customer\t" << "Total Pembayaran" << endl;
+        cout << setw(55) << "=======================================================\n";
+        
+        while(curr != NULL){
+            // cout << setw(10) << count++ << setw(15) << curr->nama << setw(15) << curr->qty << setw(15) << "Rp." << *curr->harga * curr->qty << endl;
+            cout << setw(6) << count++ << setw(15) << curr->namaCust << "\t" << "Rp." << curr->total <<endl;
+            total += curr->total;
+            curr = curr->next;
+        }
+        cout << setw(55) << "-------------------------------------------------------\n";
+        cout << setw(25) << "Total = Rp." << total << endl;
+        cout << setw(55) << "=======================================================\n";
+        
+
+    } else {
+        
+        cout << setw(55) << "\n=======================================================\n";
+        cout << "\nBelum Ada Penjualan\n";
+        cout << setw(55) << "=======================================================\n";
+    }
+    wait();
+}
+
 void adminDashboard(){
     int opsi;
 
     while(true){
-        cout << "===== Selamat datang di Restoran 69! =====\n";
+        cout << "\n===== Selamat datang di Restoran 69! =====\n";
         cout << "1. Lihat Daftar Menu\n";
         cout << "2. Buat Menu Baru\n";
         cout << "3. Hapus Menu\n";
@@ -102,10 +134,12 @@ void adminDashboard(){
 
         switch (opsi){
         case 1:
+            cout << "\n=== Daftar Menu ===\n";
             printMenu();
             wait();
             break;
         case 2:
+            cout << "\n=== Buat Menu Baru ===\n";
             printMenu();
             addMenu();
             break;
@@ -116,14 +150,15 @@ void adminDashboard(){
 
         case 4:
             cout << "\n=== Cetak Laporan Pendapatan ===\n";
-            viewLaporan();
+            printSaleReport();
             break;
         
         case 5:
+            USER_FOUND = false;
             return;
 
         case 6:
-            isContinue = false;
+            IS_CONTINUE = false;
             return;
 
         default:

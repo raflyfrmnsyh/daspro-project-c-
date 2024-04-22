@@ -5,16 +5,16 @@
 #pragma once
 using namespace std;
 
-extern const int maxUsers;
-extern const int numColumns;
+extern const int MAX_USER;
+extern const int NUM_COLUMNS;
 
 extern int numUsers;
-extern string (*pUsers)[numColumns];
+extern string (*pUsers)[NUM_COLUMNS];
 
-extern string* pUserProfile[numColumns];
+extern string* pUserProfile[NUM_COLUMNS];
 
 void printArrayUsers(){
-    for(int i = 0; i < maxUsers; i++){
+    for(int i = 0; i < MAX_USER; i++){
         // [i][0]
         if ( *(*(pUsers + i)) == ""){
             continue;
@@ -43,7 +43,7 @@ bool isUsernameTaken(const string& username) {
 }
 
 void registerUser() {
-if (numUsers < maxUsers) {
+if (numUsers < MAX_USER) {
         string username, password, role;
         while (true)
         {
@@ -90,8 +90,6 @@ void loginUser() {
     cout << "Masukkan password: ";
     password = inputOneWord();
 
-    bool userFound = false;
-
     for (int i = 0; i < numUsers; ++i) {
         if (*(*(pUsers + i) + 0) == username && *(*(pUsers + i) + 1) == password) {
             cout << "Login berhasil. Selamat datang, " << username << "!" << endl;
@@ -102,17 +100,17 @@ void loginUser() {
             pUserProfile[1] = (*(pUsers + i) + 1); // password
             pUserProfile[2] = (*(pUsers + i) + 2); // role
 
-            cout << pUserProfile[0] << " : " << *pUserProfile[0] << endl;
+            cout << endl << pUserProfile[0] << " : " << *pUserProfile[0] << endl;
             cout << pUserProfile[1] << " : " << *pUserProfile[1] << endl;
             cout << pUserProfile[2] << " : " << *pUserProfile[2] << endl;
 
-            userFound = true;
+            USER_FOUND = true;
             break;
         }
     }
 
-    if (!userFound) {
-        cout << "Login gagal. Silakan coba lagi." << endl;
+    if (!USER_FOUND) {
+        cout << "\n(Login gagal. Silakan coba lagi)\n";
     }
 }
 
@@ -124,10 +122,9 @@ void loginGate(){
         cout << "2. Login" << endl;
         cout << "3. Keluar" << endl;
         
-        cout << "\t(length array): " << endl;
-        cout << "\t(isi array):\n";
+        cout << "(isi array):\n";
         printArrayUsers();
-        cout << endl;
+        cout << endl << endl;
 
         cout << "Pilihan Anda: ";
         choice = inputValidInt();
@@ -143,6 +140,7 @@ void loginGate(){
 
             case 3:
                 cout << "Terima kasih. Sampai jumpa!" << endl;
+                IS_CONTINUE = false;
                 return;
 
             default:

@@ -25,6 +25,6 @@ string inputOneWord(){
 void wait(){
     cout << "Enter untuk lanjutkan\n";
     cin.get();
-    cin.clear();
-    cin.ignore(100,'\n');
+    // cin.clear();
+    // cin.ignore(100,'\n');
 }
