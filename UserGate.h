@@ -5,13 +5,13 @@
 #pragma once
 using namespace std;
 
-extern const int MAX_USER;
-extern const int NUM_COLUMNS;
+// extern const int MAX_USER;
+// extern const int NUM_COLUMNS;
 
-extern int numUsers;
-extern string (*pUsers)[NUM_COLUMNS];
+// extern int numUsers;
+// extern string (*pUsers)[NUM_COLUMNS];
 
-extern string* pUserProfile[NUM_COLUMNS];
+// extern string* pUserProfile[NUM_COLUMNS];
 
 void printArrayUsers(){
     for(int i = 0; i < MAX_USER; i++){

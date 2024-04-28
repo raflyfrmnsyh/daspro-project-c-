@@ -1,7 +1,6 @@
 #include <iostream>
 #include <string>
 #include "ValidInput.h"
-#include "rafly.h"
 #include "UserGate.h"
 using namespace std;
 
