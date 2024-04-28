@@ -1,3 +1,4 @@
+#include <iomanip>
 #include <iostream>
 #include <string>
 #include "ValidInput.h"
@@ -84,6 +85,48 @@ void addMenu(){
 
 }
 
+void deleteMenu () {
+    if (isMenuEmpty()) {
+        cout << "Menu kosong. Tidak ada yang dihapus." << endl;
+        return;
+    }
+
+    FoodMenu *current = firstMenu, *prevMenu = nullptr;
+    string id, confirm;
+    current = firstMenu;
+    
+    cout << "ID Menu yang ingin dihapus: ";
+    id = inputOneWord();
+    
+    while (current != nullptr) {
+        if (current->id == id) {
+            cout << "Yakin ingin menghapus data tsb? (y/n): ";
+            confirm = inputOneWord();
+
+            if(confirm != "y"){
+                cout << "Menu tidak jadi dihapus!\n";
+                return;
+            } else {
+                if (current == firstMenu) {
+                    firstMenu = current->next;
+                    if (firstMenu != nullptr)
+                        firstMenu->prev = nullptr;
+                        
+                } else {
+                    prevMenu->next = current->next;
+                    if (current->next != nullptr)
+                        current->next->prev = prevMenu;
+                }
+                delete current;
+                cout << "Menu dengan ID " << id << " telah dihapus." << endl;
+            } 
+            
+        }
+        prevMenu = current;
+        current = current->next;
+    }
+}
+
 void printSaleReport() {
     Transaction *curr;
     int total = 0;
@@ -145,6 +188,8 @@ void adminDashboard(){
 
         case 3:
             cout << "\n=== Hapus Menu ===\n";
+            printMenu();
+            deleteMenu();
             break;
 
         case 4:
