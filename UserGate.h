@@ -114,7 +114,7 @@ void loginGate(){
         cout << "2. Login" << endl;
         cout << "3. Keluar" << endl;
         
-        cout << "(isi array):\n";
+        cout << "(database array user):\n";
         printArrayUsers();
         cout << endl << endl;
 
