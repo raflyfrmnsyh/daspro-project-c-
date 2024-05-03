@@ -105,7 +105,6 @@ void removeOrder(){
             break;
         }
         current = current->next;
-        cout << "loop\n";
     }
 
     // jika id menu ada di cart...
@@ -217,7 +216,7 @@ void customerDashboard(){
     int opsi;
 
     while(true){
-        cout << "\n\n===== Selamat datang di Restoran 69! =====\n";
+        cout << "\n\n===== Selamat datang di Restoran 77! =====\n";
         cout << "1. Tambah Pesanan\n";
         cout << "2. Lihat Pesanan\n";
         cout << "3. Kurangi Pesanan\n";

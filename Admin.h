@@ -163,7 +163,7 @@ void adminDashboard(){
     int opsi;
 
     while(true){
-        cout << "\n===== Selamat datang di Restoran 69! =====\n";
+        cout << "\n===== Selamat datang di Restoran 77! =====\n";
         cout << "1. Lihat Daftar Menu\n";
         cout << "2. Buat Menu Baru\n";
         cout << "3. Hapus Menu\n";
