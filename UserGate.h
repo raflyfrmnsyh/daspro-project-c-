@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <conio.h>
 #include "ValidInput.h"
 
 #pragma once
@@ -17,6 +18,7 @@ void printArrayUsers(){
         cout << endl;
     }
 }
+
 
 void createAccount(string name, string password, string role){
     *(*(pUsers + numUsers) + 0) = name;
@@ -36,7 +38,13 @@ bool isUsernameTaken(const string& username) {
 
 void registerUser() {
 if (numUsers < MAX_USER) {
-        string username, password, role;
+
+        const int max_pass_length = 100;
+        char pass[max_pass_length];
+        char ch;
+        int i = 0;
+
+        string username, role;
         while (true)
         {
             cout << "Masukkan username: ";
@@ -47,10 +55,26 @@ if (numUsers < MAX_USER) {
                 username = inputOneWord();
             }
             
-            cout << "Masukkan password: ";
-            password = inputOneWord();
+            cout << "Masukkan password : ";
+            // password = inputOneWord();
+            while(true){
+                ch = getch();
 
-            cout << "Masukkan role\n\t1: customer\n\t2: admin ";
+                if (ch == '\r'){
+                    pass[i] = '\0';
+                    break;
+                }
+
+                else if (ch == '\b' && i > 0){
+                    cout << "\b \b";
+                    i--;
+                } else if (i < max_pass_length - 1){
+                    pass[i++] = ch;
+                    cout << '*';
+                }
+            }
+
+            cout << "\nMasukkan role\n\t1: customer\n\t2: admin ";
             role = inputOneWord();
 
             if (role == "1") {
@@ -66,7 +90,7 @@ if (numUsers < MAX_USER) {
                 return;
             }
         }
-        createAccount(username, password, role);
+        createAccount(username, pass, role);
         cout << "Pengguna berhasil terdaftar." << endl;
         
     } else {
@@ -75,15 +99,38 @@ if (numUsers < MAX_USER) {
 }
 
 void loginUser() {
+    const int max_pass_length = 100;
+    char pass[max_pass_length];
+    char ch;
+    int i = 0;
+
     string username, password;
     cout << "Masukkan username: ";
     username = inputOneWord();
 
+
     cout << "Masukkan password: ";
-    password = inputOneWord();
+
+        while(true){
+            ch = getch();
+
+            if (ch == '\r'){
+                pass[i] = '\0';
+                break;
+            }
+
+            else if (ch == '\b' && i > 0){
+                cout << "\b \b";
+                i--;
+            } else if (i < max_pass_length - 1){
+                pass[i++] = ch;
+                cout << '*';
+            }
+        }
+    // password = inputOneWord();
 
     for (int i = 0; i < numUsers; ++i) {
-        if (*(*(pUsers + i) + 0) == username && *(*(pUsers + i) + 1) == password) {
+        if (*(*(pUsers + i) + 0) == username && *(*(pUsers + i) + 1) == pass) {
             cout << "Login berhasil. Selamat datang, " << username << "!" << endl;
             // cout << "Role: " << *(*(pUsers + i) + 2) << endl;
 
