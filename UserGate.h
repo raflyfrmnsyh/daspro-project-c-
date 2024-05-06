@@ -20,10 +20,11 @@ void printArrayUsers(){
 }
 
 
-void createAccount(string name, string password, string role){
+void createAccount(string name, string password, string role, int saldo){
     *(*(pUsers + numUsers) + 0) = name;
     *(*(pUsers + numUsers) + 1) = password;
     *(*(pUsers + numUsers) + 2) = role;
+    usersWallet[numUsers] = saldo;
     numUsers++;
 }
 
@@ -90,7 +91,7 @@ if (numUsers < MAX_USER) {
                 return;
             }
         }
-        createAccount(username, pass, role);
+        createAccount(username, pass, role, 0);
         cout << "Pengguna berhasil terdaftar." << endl;
         
     } else {
@@ -142,7 +143,7 @@ void loginUser() {
             // cout << endl << pUserProfile[0] << " : " << *pUserProfile[0] << endl;
             // cout << pUserProfile[1] << " : " << *pUserProfile[1] << endl;
             // cout << pUserProfile[2] << " : " << *pUserProfile[2] << endl;
-
+            currUser = i;
             USER_FOUND = true;
             break;
         }

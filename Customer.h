@@ -32,6 +32,11 @@ void addOrder(){
         cout << "\tJumlah\t: ";
         jumlah = inputValidInt();
 
+        while(jumlah < 0){
+            cout << "Jumlah tidak valid!\tJumlah\t: ";
+            jumlah = inputValidInt();
+        }
+
         Cart *currentCart, *prevCart, *newCart;
         newCart = new Cart;
         newCart->nama = &current->nama;
@@ -167,6 +172,23 @@ void deleteAllCart(){
     }
 }
 
+void topUp(){
+    int amount;
+    cout << "Masukkan nominal (kelipatan 50000): ";
+    amount = inputValidInt();
+
+    while(amount < 0 || amount % 50000 != 0){
+        cout << "Jumlah tidak valid!\n";
+        cout << "Masukkan nominal: ";
+        amount = inputValidInt();
+    }
+
+    // cout << "Masukkan password: ";
+    usersWallet[currUser] += amount;
+    cout << "Top up berhasil, menambahkan Rp." << amount << " ke dalam saldo\n";
+
+}
+
 void addTransaction(){
     Transaction *newTransaction, *currTransaction;
     newTransaction = new Transaction;
@@ -186,10 +208,26 @@ void addTransaction(){
     }
 }
 
+int hitungTotal(){
+    if(firstCart != NULL){
+        Cart *curr;
+        int total = 0;
+        curr = firstCart;
+        while(curr != NULL){
+            total += ((*curr->harga) * curr->qty);
+            curr = curr->next;
+        }
+        return total;
+    } else {
+        return 0;
+    }
+}
+
 void checkout(){
     string confirm;
     printCart();
     cout << "\nYakin ingin checkout dan mencetak invoice? (y/n): ";
+    int totalPembayaran = hitungTotal();
     confirm = inputOneWord();
 
     if(confirm != "y"){
@@ -200,15 +238,28 @@ void checkout(){
         // addTransaction()
         // deleteAllCart()
         // TOTAL_PAYMENT = 0
+        if(usersWallet[currUser] < totalPembayaran){
+            cout << "Saldo anda tidak mencukupi!\nIngin melanjutkan ke top up? (y/n): ";
+            confirm = inputOneWord();
+            if(confirm == "y"){
+                topUp();
+                cout << "silahkan checkout kembali!\n";
+                return;
+            } else {
+                return;
+            }
 
-        cout << "\n=================== Restoran 69 ======================\n";
-        cout << "Nama Pelanggan\t: " << **(pUserProfile + 0) << endl;
-        printCart();
-        cout << "======================================================\n";
+        } else {
+            cout << "\n=================== Restoran 69 ======================\n";
+            cout << "Nama Pelanggan\t: " << **(pUserProfile + 0) << endl;
+            printCart();
+            cout << "======================================================\n";
 
-        addTransaction();
-        deleteAllCart();
-        printCart();
+            addTransaction();
+            deleteAllCart();
+            printCart();
+            usersWallet[currUser] -= totalPembayaran;
+        }
     }
 }
 
@@ -217,12 +268,14 @@ void customerDashboard(){
 
     while(true){
         cout << "\n\n===== Selamat datang di Restoran 77! =====\n";
+        printSaldo();
         cout << "1. Tambah Pesanan\n";
         cout << "2. Lihat Pesanan\n";
         cout << "3. Kurangi Pesanan\n";
         cout << "4. Checkout dan Cetak Invoice\n";
-        cout << "5. Logout\n";
-        cout << "6. Keluar Aplikasi\n";
+        cout << "5. Top Up Saldo\n";
+        cout << "6. Logout\n";
+        cout << "7. Keluar Aplikasi\n";
         cout << "\nOpsi\t: ";
         opsi = inputValidInt();
 
@@ -252,11 +305,15 @@ void customerDashboard(){
             break;
 
         case 5:
+            cout << "\n=== Top Up Saldo ===\n";
+            topUp();
+            break;
+        case 6:
             USER_FOUND = false;
             deleteAllCart();
             return;
 
-        case 6:
+        case 7:
             IS_CONTINUE = false;
             return;
 

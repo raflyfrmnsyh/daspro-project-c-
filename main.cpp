@@ -4,13 +4,15 @@ using namespace std;
 
 // <user db>
 const int MAX_USER = 20;
-const int NUM_COLUMNS = 3;
+const int NUM_COLUMNS = 3; // username, password, role
 
 int numUsers = 0;
+int currUser;
 bool IS_CONTINUE = true;
 bool USER_FOUND = false;
 
 string users[MAX_USER][NUM_COLUMNS];
+int usersWallet[MAX_USER]; // array nyimpen saldo semua user
 string (*pUsers)[NUM_COLUMNS] = users;
 
 // string userProfile[numColumns];
@@ -73,6 +75,10 @@ void printMenu(){
     }
 }
 
+void printSaldo(){
+    cout << "[Saldo Anda: Rp." << usersWallet[currUser] << " ]\n";
+}
+
 #include "Customer.h"
 #include "Admin.h"
 
@@ -92,8 +98,8 @@ void initApp(){
     createMenu("Lauk", "a4", "Ikan Bakar", 23000);
     createMenu("Nasi", "n4", "Nasi Goreng", 13000);
 
-    createAccount("admin", "admin", "admin");
-    createAccount("caca", "caca", "customer");
+    createAccount("admin", "admin", "admin", 0);
+    createAccount("caca", "caca", "customer", 100000);
 }
 
 int main(){
