@@ -68,9 +68,9 @@ void printMenu(){
 
         while(current != NULL){
             if(current->prev == NULL || current->kategori != current->prev->kategori){
-                cout << "\n[id]\t[" << current->kategori << "]" << "\t\t\t [Harga]\t[Stok]\n";
+                cout << "\n[id]\t[" << current->kategori << "]" << "  \t\t[Harga]\t\t\t[Stok]\n";
             }
-            cout << current->id << "\t" << current->nama << "\t\tRp " << current->harga << "\t\t " << current->sisaStok << "\n";
+            cout << current->id << "\t" << current->nama << "\t\tRp " << current->harga << "  \t\t" << current->sisaStok << "\n";
             current = current->next;
         }
     }
