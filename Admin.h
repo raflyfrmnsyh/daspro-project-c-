@@ -5,13 +5,14 @@
 #include "UserGate.h"
 using namespace std;
 
-void createMenu(string kategori, string id, string nama, int harga){
+void createMenu(string kategori, string id, string nama, int harga, int sisaStok){
     FoodMenu *newMenu, *current, *nextMenu;
     newMenu = new FoodMenu;
     newMenu->nama = nama;
     newMenu->id = id;
     newMenu->kategori = kategori;
     newMenu->harga = harga;
+    newMenu->sisaStok = sisaStok;
     newMenu->next = NULL;
 
     if(!isMenuEmpty()){
@@ -48,7 +49,7 @@ bool menuIdExists(string newId){
 
 void addMenu(){
     string newId, newName, newCategory, confirm;
-    int newPrice;
+    int newPrice, newStok;
 
     cout << "\n\tID menu baru: ";
     newId = inputOneWord();
@@ -68,22 +69,62 @@ void addMenu(){
     cout << "\n\tHarga menu baru: ";
     newPrice = inputValidInt();
 
+    cout << "\n\tStok menu baru: ";
+    newStok = inputValidInt();
+    
     cout << "ID\t\t: " << newId << endl;
     cout << "Nama Menu\t: "<< newName << endl;
     cout << "Kategori\t: " << newCategory << endl;
     cout << "Harga\t\t: " << newPrice << endl;
+    cout << "Stok\t\t: " << newStok << endl;
 
     cout << "Yakin ingin menambahkan data tsb? (y/n): ";
     confirm = inputOneWord();
 
     if(confirm == "y"){
-        createMenu(newCategory, newId, newName, newPrice);
+        createMenu(newCategory, newId, newName, newPrice, newStok);
         cout << "Menu berhasil ditambahkan!\n";
     } else {
         cout << "Menu tidak jadi ditambahkan!\n";
     }
 
 }
+
+void addStok() {
+    string idMenu;
+    int tambahanStok;
+
+    cout << "ID Menu yang stoknya akan ditambahkan: ";
+    idMenu = inputOneWord();
+
+    FoodMenu *current = firstMenu;
+    while (current != nullptr) {
+        if (current->id == idMenu) {
+            break;
+        }
+        current = current->next;
+    }
+
+    if (current == nullptr) {
+        cout << "Menu tidak ditemukan!\n";
+        return;
+    }
+
+    cout << "Jumlah stok yang ditambahkan: ";
+    tambahanStok = inputValidInt();
+
+    // Memastikan stok yang ditambahkan tidak negatif
+    while (tambahanStok < 0) {
+        cout << "Jumlah stok tidak valid!\n";
+        cout << "Jumlah stok yang ditambahkan: ";
+        tambahanStok = inputValidInt();
+    }
+
+    // Menambah stok
+    current->sisaStok += tambahanStok;
+    cout << "Stok untuk menu " << current->nama << " berhasil ditambahkan menjadi " << current->sisaStok << ".\n";
+}
+
 
 void deleteMenu () {
     if (isMenuEmpty()) {
@@ -168,8 +209,9 @@ void adminDashboard(){
         cout << "2. Buat Menu Baru\n";
         cout << "3. Hapus Menu\n";
         cout << "4. Cetak Laporan Pendapatan\n";
-        cout << "5. Logout\n";
-        cout << "6. Keluar\n";
+        cout << "5. Tambah Stok\n";
+        cout << "6. Logout\n";
+        cout << "7. Keluar\n";
         cout << "\nOpsi\t: ";
 
         opsi = inputValidInt();
@@ -198,10 +240,16 @@ void adminDashboard(){
             break;
         
         case 5:
-            USER_FOUND = false;
-            return;
+            cout << "\n=== Tambah Stok ===\n";
+            printMenu();
+            addStok();
+            break;
 
         case 6:
+            USER_FOUND = false;
+            return;
+        
+        case 7:
             IS_CONTINUE = false;
             return;
 

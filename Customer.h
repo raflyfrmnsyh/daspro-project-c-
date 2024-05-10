@@ -37,6 +37,12 @@ void addOrder(){
             jumlah = inputValidInt();
         }
 
+        if (current->sisaStok < jumlah) {
+                    cout << "Stok tidak cukup untuk pesanan ini!\n";
+                    return;
+                }
+
+        current->sisaStok -= jumlah;
         Cart *currentCart, *prevCart, *newCart;
         newCart = new Cart;
         newCart->nama = &current->nama;
@@ -120,6 +126,17 @@ void removeOrder(){
             cout << "Jumlah pesanan yang dikurangi tidak boleh lebih dari yang jumlah yang dipesan!\nKurangi sebanyak: ";
             jumlah = inputValidInt();
         }
+
+        // tambahkan jumlah pesanan yang dihapus ke stok kembali
+        FoodMenu *menu = firstMenu;
+        while (menu != nullptr) {
+            if (menu->id == *current->id) {
+                menu->sisaStok += jumlah;
+                break;
+            }
+            menu = menu->next;
+        }
+
         current->qty -= jumlah;
         TOTAL_PAYMENT -= (jumlah * *current->harga);
 

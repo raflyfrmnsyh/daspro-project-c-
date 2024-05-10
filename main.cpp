@@ -27,6 +27,7 @@ struct FoodMenu{
     string id;
     string nama;
     int harga;
+    int sisaStok;
     FoodMenu *next;
     FoodMenu *prev;
 };
@@ -67,9 +68,9 @@ void printMenu(){
 
         while(current != NULL){
             if(current->prev == NULL || current->kategori != current->prev->kategori){
-                cout << "\n[id]\t[" << current->kategori << "]\n";
+                cout << "\n[id]\t[" << current->kategori << "]" << "\t\t\t [Harga]\t[Stok]\n";
             }
-            cout << current->id << "\t" << current->nama << "\t\tRp " << current->harga << "\n";
+            cout << current->id << "\t" << current->nama << "\t\tRp " << current->harga << "\t\t " << current->sisaStok << "\n";
             current = current->next;
         }
     }
@@ -83,20 +84,20 @@ void printSaldo(){
 #include "Admin.h"
 
 void initApp(){
-    createMenu("Lauk", "a1", "Ayam Bakar", 15000);
-    createMenu("Lauk", "a2", "Ayam Goreng", 13000);
-    createMenu("Lauk", "a3", "Ayam Geprek", 17000);
+    createMenu("Lauk", "a1", "Ayam Bakar", 15000, 10);
+    createMenu("Lauk", "a2", "Ayam Goreng", 13000, 20);
+    createMenu("Lauk", "a3", "Ayam Geprek", 17000, 20);
 
-    createMenu("Nasi", "n1", "Nasi Putih", 5000);
-    createMenu("Nasi", "n2", "Nasi Kuning", 7000);
-    createMenu("Nasi", "n3", "Nasi Kebuli", 10000);
+    createMenu("Nasi", "n1", "Nasi Putih", 5000, 20);
+    createMenu("Nasi", "n2", "Nasi Kuning", 7000, 20);
+    createMenu("Nasi", "n3", "Nasi Kebuli", 10000, 20);
 
-    createMenu("Minuman", "m1", "Es Teh Manis", 7000);
-    createMenu("Minuman", "m2", "Air Mineral", 4000);
-    createMenu("Minuman", "m3", "Es Jeruk", 8000);
+    createMenu("Minuman", "m1", "Es Teh Manis", 7000, 29);
+    createMenu("Minuman", "m2", "Air Mineral", 4000, 20);
+    createMenu("Minuman", "m3", "Es Jeruk", 8000, 20);
 
-    createMenu("Lauk", "a4", "Ikan Bakar", 23000);
-    createMenu("Nasi", "n4", "Nasi Goreng", 13000);
+    createMenu("Lauk", "a4", "Ikan Bakar", 23000, 10);
+    createMenu("Nasi", "n4", "Nasi Goreng", 13000, 5);
 
     createAccount("admin", "admin", "admin", 0);
     createAccount("caca", "caca", "customer", 100000);
